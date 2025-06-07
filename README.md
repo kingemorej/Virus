@@ -274,3 +274,113 @@ pyinstaller --onefile --windowed --icon=error.ico fake_error.py
 - Right-click desktop → New → Shortcut
 - Browse to: C:\Users\Administrator\Downloads\malware\virus3\dist\fake_error.exe
 - Name it "Confidential Files"
+
+
+
+
+
+# Virus 3 Infinite Folder
+
+### Step 1: Inside the malware folder add a new folder (vs code) name it virus3
+
+### Step 2: Setup your Virtual Environment
+Open vs code and in the terminal move out of directory:
+```bash
+cd ..
+```
+```bash
+cd virus3
+````
+Install Required Library
+```bash
+pip install pywin32
+```
+
+### Step 3: infinitefolder_prank.py.
+
+```bash
+import os
+import time
+import shutil
+from threading import Thread
+
+# ===== CONFIG =====
+FOLDER_NAME = "FOLDER_INVASION"    # Name of the main folder
+DELAY_SECONDS = 0.3                # Speed of appearance (0.3s is optimal)
+TOTAL_FOLDERS = 50                 # Total folders to create (stops automatically)
+# ==================
+
+def get_desktop_path():
+    """Get the correct Desktop path (works with OneDrive too)"""
+    desktop = os.path.join(os.path.expanduser("~"), "Desktop")
+    if not os.path.exists(desktop):
+        desktop = os.path.join(os.path.expanduser("~"), "OneDrive", "Desktop")
+    return desktop
+
+def create_visible_folders():
+    """Creates folders that visibly appear on Desktop"""
+    desktop = get_desktop_path()
+    root_path = os.path.join(desktop, FOLDER_NAME)
+    
+    # Clear previous run if exists
+    if os.path.exists(root_path):
+        shutil.rmtree(root_path)
+    
+    # Create initial folder
+    os.makedirs(root_path)
+    
+    # Create nested folders
+    current_path = root_path
+    for i in range(1, TOTAL_FOLDERS + 1):
+        current_path = os.path.join(current_path, f"FOLDER_{i}")
+        os.makedirs(current_path)
+        
+        # Force folder refresh on Windows
+        if os.name == 'nt':
+            os.system(f'explorer /select,"{current_path}"')
+        
+        print(f"Created: {current_path}")  # Console log
+        time.sleep(DELAY_SECONDS)
+
+if __name__ == "__main__":
+    print("\n=== VISIBLE FOLDER PRANK ===")
+    print(f"Creating {TOTAL_FOLDERS} folders on Desktop...\n")
+    print("Watch them appear in real-time!")
+    print("Press CTRL+C to stop early\n")
+    
+    try:
+        create_visible_folders()
+    except KeyboardInterrupt:
+        print("\nStopped by user!")
+    finally:
+        print(f"\nDone! Check your Desktop for '{FOLDER_NAME}'")
+        print("To delete: Right-click the folder and select 'Delete'")
+```
+
+Run it:
+```bash
+python infinitefolder_prank.py
+```
+
+Creating a Clickable Desktop Icon
+#### #1 Convert Script to EXE
+
+- Navigate to this link: https://www.iconarchive.com/
+- Search your desired icon. For example: gift
+- Click All Downloads Format
+- Choose Windows: Download ICO
+- Rename the file into gift
+- Move the gift.ico to your folder
+
+In your terminal, paste this:
+```bash
+pip install pyinstaller
+pyinstaller --onefile --windowed --icon=gift.ico infinitefolder_prank.py
+```
+
+#### #2 Create the Desktop Shortcut
+- Right-click desktop → New → Shortcut
+- Browse to: C:\Users\Administrator\Downloads\malware\virus2\dist\infinitefolder_prank.exe
+- Name it "Free Gift"
+
+
