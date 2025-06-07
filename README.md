@@ -1,1 +1,137 @@
-# Virus
+# Virus 1
+
+
+### Step 1: Make a new folder (in downloads folder) and name it malware
+
+- Inside the malware folder add a new folder again and name it virus1
+
+---
+
+### Step 2: Setup your Virtual Environment
+
+Open VS Code of your project folder (which is the malware folder) and paste this:
+
+To activate:
+
+```bash
+venv\Scripts\activate
+```
+
+Then move to your folder directory
+```bash
+cd virus1
+```
+ ### Step 3: Install Required Libraries
+
+```bash
+pip install pyautogui psutil pywin32
+```
+
+### Step 4: ghost_prank.py
+
+```bash
+import os
+import random
+import time
+import pyautogui
+import psutil
+import win32gui
+import win32con
+from threading import Thread
+
+# ===== CONFIG =====
+FOLDER_NAME = "GHOST_FOLDER"    # Spooky folder name
+DELAY_SECONDS = 1               # How often it moves (seconds)
+DURATION_MINUTES = 2            # How long it runs (0 = forever)
+SHOW_FAKE_ERROR = True          # Pop-up fake virus warning?
+# ==================
+
+def show_fake_error():
+    """Shows a fake virus warning message."""
+    win32gui.MessageBox(
+        0,
+        "WARNING: GHOSTWARE DETECTED!\n\nYour system is haunted by a rogue folder spirit. Do not interfere!",
+        "CRITICAL VIRUS ALERT",
+        win32con.MB_ICONWARNING | win32con.MB_SYSTEMMODAL
+    )
+
+def create_folder():
+    """Creates the prank folder on the desktop."""
+    desktop = os.path.join(os.path.expanduser("~"), "Desktop")
+    folder_path = os.path.join(desktop, FOLDER_NAME)
+    os.makedirs(folder_path, exist_ok=True)
+    return folder_path
+
+def move_folder(folder_path):
+    """Moves the folder to random positions on screen."""
+    screen_width, screen_height = pyautogui.size()
+    
+    while True:
+        try:
+            # Generate random position
+            x = random.randint(0, screen_width - 100)
+            y = random.randint(0, screen_height - 100)
+            
+            # Windows Explorer trick to move folder
+            os.system(f'powershell.exe -command "$sh = New-Object -ComObject Shell.Application; $sh.Namespace(0).ParseName(\'{folder_path}\').InvokeVerb(\'move\')"')
+            pyautogui.moveTo(x, y, duration=0.5)
+            pyautogui.click()  # "Drops" the folder
+            
+            time.sleep(DELAY_SECONDS)
+        except:
+            break
+
+def is_explorer_running():
+    """Checks if Windows Explorer is running."""
+    return "explorer.exe" in (p.name() for p in psutil.process_iter())
+
+def main():
+    if not is_explorer_running():
+        print("Error: Windows Explorer must be running!")
+        return
+
+    folder_path = create_folder()
+    print(f"Ghost folder created at: {folder_path}")
+    print("Press CTRL+C to stop early.")
+
+    if SHOW_FAKE_ERROR:
+        Thread(target=show_fake_error, daemon=True).start()
+
+    # Run folder movement in background
+    Thread(target=move_folder, args=(folder_path,), daemon=True).start()
+    
+    if DURATION_MINUTES > 0:
+        time.sleep(DURATION_MINUTES * 60)
+    else:
+        while True:
+            time.sleep(1)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nPrank stopped by user.")
+    finally:
+        print("The ghost has been banished! Folder remains but won't move anymore.")
+```
+
+### Step 5: Run ghost_prank.py
+```bash
+python ghost_prank.py
+```
+
+Creating a Clickable Desktop Icon
+#### #1 Convert Script to EXE
+
+- Navigate to this link: https://www.iconarchive.com/
+- Search your desired icon. For example: ghost
+- Click All Downloads Format
+- Choose Windows: Download ICO
+- Rename the file into ghost
+- Move the ghost.ico to your folder
+
+Paste this: 
+```bash
+pip install pyinstaller
+pyinstaller --onefile --windowed --icon=ghost.ico ghost_prank.py
+```
