@@ -3,7 +3,7 @@
 ### Step 1: Make a new folder (in downloads folder) and name it malware
 
 - Inside the malware folder add a new folder again and name it virus1
-
+- Download the .wav file (e.g. 668981__vestibule-door__monster-loose-alarm.wav) and save it directly to your Downloads folder
 ---
 
 ### Step 2: Setup your Virtual Environment
@@ -11,6 +11,9 @@
 Open VS Code of your project folder (which is the malware folder) and paste this:
 
 To activate:
+```bash 
+python -m venv venv
+```
 
 ```bash
 venv\Scripts\activate
@@ -23,7 +26,7 @@ cd virus1
  ### Step 3: Install Required Libraries
 
 ```bash
-pip install pyautogui psutil pywin32
+pip install pyautogui psutil pywin32 pygame
 ```
 
 ### Step 4: ghost_prank.py
@@ -37,16 +40,24 @@ import psutil
 import win32gui
 import win32con
 from threading import Thread
+import pygame  # 🔊 For playing .wav sound
 
 # ===== CONFIG =====
-FOLDER_NAME = "GHOST_FOLDER"    # Spooky folder name
-DELAY_SECONDS = 1               # How often it moves (seconds)
-DURATION_MINUTES = 2            # How long it runs (0 = forever)
-SHOW_FAKE_ERROR = True          # Pop-up fake virus warning?
+FOLDER_NAME = "GHOST_FOLDER"
+DELAY_SECONDS = 1
+DURATION_MINUTES = 2
+SHOW_FAKE_ERROR = True
 # ==================
 
 def show_fake_error():
-    """Shows a fake virus warning message."""
+    """Shows a fake virus warning message and plays sound using pygame."""
+    try:
+        pygame.mixer.init()
+        pygame.mixer.music.load("C:/Users/rivan/Downloads/668981__vestibule-door__monster-loose-alarm.wav")
+        pygame.mixer.music.play()
+    except Exception as e:
+        print(f"Error playing sound: {e}")
+
     win32gui.MessageBox(
         0,
         "WARNING: GHOSTWARE DETECTED!\n\nYour system is haunted by a rogue folder spirit. Do not interfere!",
@@ -55,33 +66,25 @@ def show_fake_error():
     )
 
 def create_folder():
-    """Creates the prank folder on the desktop."""
     desktop = os.path.join(os.path.expanduser("~"), "Desktop")
     folder_path = os.path.join(desktop, FOLDER_NAME)
     os.makedirs(folder_path, exist_ok=True)
     return folder_path
 
 def move_folder(folder_path):
-    """Moves the folder to random positions on screen."""
     screen_width, screen_height = pyautogui.size()
-    
     while True:
         try:
-            # Generate random position
             x = random.randint(0, screen_width - 100)
             y = random.randint(0, screen_height - 100)
-            
-            # Windows Explorer trick to move folder
             os.system(f'powershell.exe -command "$sh = New-Object -ComObject Shell.Application; $sh.Namespace(0).ParseName(\'{folder_path}\').InvokeVerb(\'move\')"')
             pyautogui.moveTo(x, y, duration=0.5)
-            pyautogui.click()  # "Drops" the folder
-            
+            pyautogui.click()
             time.sleep(DELAY_SECONDS)
         except:
             break
 
 def is_explorer_running():
-    """Checks if Windows Explorer is running."""
     return "explorer.exe" in (p.name() for p in psutil.process_iter())
 
 def main():
@@ -96,9 +99,8 @@ def main():
     if SHOW_FAKE_ERROR:
         Thread(target=show_fake_error, daemon=True).start()
 
-    # Run folder movement in background
     Thread(target=move_folder, args=(folder_path,), daemon=True).start()
-    
+
     if DURATION_MINUTES > 0:
         time.sleep(DURATION_MINUTES * 60)
     else:
