@@ -138,9 +138,9 @@ pyinstaller --onefile --windowed --icon=ghost.ico ghost_prank.py
 ```
 #### #2 Create the Desktop Shortcut
 - Right-click desktop → New → Shortcut
--Browse to: C:\Users\Administrator\Downloads\malware\virus1\dist\ghost_prank.exe
--Name it "TRICK OR TREAT"
--Right-click shortcut → Properties → Change Icon → Select your ghost.ico
+- Browse to: C:\Users\Administrator\Downloads\malware\virus1\dist\ghost_prank.exe
+- Name it "TRICK OR TREAT"
+- Right-click shortcut → Properties → Change Icon → Select your ghost.ico
 
 # Virus 2
 
