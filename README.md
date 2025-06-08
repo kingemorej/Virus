@@ -385,4 +385,5 @@ pyinstaller --onefile --windowed --icon=gift.ico infinitefolder_prank.py
 - Browse to: C:\Users\Administrator\Downloads\malware\virus2\dist\infinitefolder_prank.exe
 - Name it "Free Gift"
 
+# Virus 4 Infinite Folder
 
