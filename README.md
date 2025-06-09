@@ -478,7 +478,7 @@ Creating a Clickable Desktop Icon
 pip install pyinstaller
 ```
 ```bash
-pyinstaller --onefile --windowed --icon=assistant.ico voice_creep.py
+pyinstaller --onefile --windowed --icon=voice.ico voice_creep.py
 ```
 
 
