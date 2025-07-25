@@ -2,9 +2,6 @@
 
 ### Step 1: Make a new folder (in downloads folder) and name it malware
 
-- Inside the malware folder add a new folder again and name it virus1
-- Download the .wav file (e.g. 668981__vestibule-door__monster-loose-alarm.wav) and save it directly to your Downloads folder
----
 
 ### Step 2: Setup your Virtual Environment
 
@@ -276,9 +273,6 @@ pyinstaller --onefile --windowed --icon=error.ico fake_error.py
 - Right-click desktop → New → Shortcut
 - Browse to: C:\Users\Administrator\Downloads\malware\virus3\dist\fake_error.exe
 - Name it "Confidential Files"
-
-
-
 
 
 # Virus 3 Infinite Folder
