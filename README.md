@@ -368,7 +368,7 @@ Creating a Clickable Desktop Icon
 In your terminal, paste this:
 ```bash
 pip install pyinstaller
-pyinstaller --onefile --windowed --icon=gift.ico infinitefolder_prank.py
+pyinstaller --onefile--windowed-- icon=ghost.ico ghost_prank.py 
 ```
 #### #2 Create the Desktop Shortcut
 - Right-click desktop → New → Shortcut
